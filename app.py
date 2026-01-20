@@ -43,6 +43,7 @@ def index():
     # 將資料傳遞給 index.html
     return render_template('index.html', subscriptions=subscriptions)
 
+# 新增路由
 @app.route('/add', methods=['GET', 'POST'])
 def add_subscription():
     if request.method == 'POST':
@@ -82,6 +83,19 @@ def add_subscription():
 
     # 如果是 GET 請求，就顯示表單
     return render_template('add.html')
+
+# 刪除路由
+@app.route('/delete/<int:id>')
+def delete_subscription(id):
+    # 根據 ID 找出那筆資料，如果找不到會回傳 404
+    subscription_to_delete = Subscription.query.get_or_404(id)
+    
+    try:
+        db.session.delete(subscription_to_delete)
+        db.session.commit()
+        return redirect(url_for('index'))
+    except:
+        return "刪除時發生錯誤"
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -25,6 +25,7 @@
                         <th>價格</th>
                         <th>週期</th>
                         <th>下次扣款日</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,6 +37,13 @@
                                 style="background: #eef2ff; color: #4f46e5; padding: 4px 10px; border-radius: 20px; font-size: 0.85rem;">{{
                                 sub.billing_cycle }}</span></td>
                         <td>{{ sub.next_payment_date }}</td>
+                        <td>
+                            <a href="{{ url_for('delete_subscription', id=sub.id) }}" class="btn"
+                                style="background-color: #ef4444; padding: 6px 14px; font-size: 0.9rem;"
+                                onclick="return confirm('確定要刪除 {{ sub.name }} 嗎？');">
+                                刪除
+                            </a>
+                        </td>
                     </tr>
                     {% else %}
                     <tr>
