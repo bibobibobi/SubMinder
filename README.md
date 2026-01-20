@@ -27,11 +27,11 @@
 ## 專案截圖 (Screenshots)
 
 ### 1. 首頁儀表板 (Dashboard)
-![Dashboard Screenshot](screenshots/dashboard.png)
+![Dashboard Screenshot](screenshot/dashboard.png)
 *清楚顯示總金額與即將到期的紅色警示。*
 
 ### 2. 新增與編輯 (Add/Edit)
-![Edit Screenshot](screenshots/add.png)
+![Edit Screenshot](screenshot/add.png)
 *簡潔的表單設計，包含日期選擇器與下拉式選單。*
 
 ## 如何在本地端執行 (Local Installation)
