@@ -52,9 +52,18 @@ def add_subscription():
         billing_cycle = request.form.get('billing_cycle')
         date_str = request.form.get('next_payment_date')
 
-        # 資料處理：把日期字串 (YYYY-MM-DD) 轉成 Python date 物件
-        # 如果使用者沒填日期，這裡會報錯，實際專案通常會加錯誤處理
-        payment_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        # === 錯誤處理開始 ===
+        # 1. 檢查是否有空值
+        if not name or not price or not date_str:
+            # 如果有缺，重新渲染 add.html，並傳入錯誤訊息
+            return render_template('add.html', error="錯誤：所有欄位（包含日期）都必須填寫！")
+        
+        try:
+            # 2. 嘗試轉換日期格式 (防止使用者亂填非日期格式)
+            payment_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        except ValueError:
+            return render_template('add.html', error="錯誤：日期格式不正確")
+        # === 錯誤處理結束 ===
 
         # 建立新物件
         new_sub = Subscription(

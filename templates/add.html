@@ -55,6 +55,12 @@
 
     <h1>新增一筆訂閱</h1>
 
+    {% if error %}
+    <div
+        style="background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #f5c6cb;">
+        {{ error }}
+    </div>
+    {% endif %}
     <form method="POST" action="/add">
         <div class="form-group">
             <label for="name">訂閱名稱 (如 Netflix)</label>
