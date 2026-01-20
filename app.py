@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime, date
 
 # 1. 初始化 Flask app
 app = Flask(__name__)
@@ -40,6 +40,27 @@ with app.app_context():
 def index():
     # 從資料庫撈出所有訂閱資料
     subscriptions = Subscription.query.all()
+
+    today = date.today()
+    total_monthly_cost = 0
+
+    for sub in subscriptions:
+        # --- 1. 計算每月平均花費 ---
+        if sub.billing_cycle == 'Monthly':
+            total_monthly_cost += sub.price
+        elif sub.billing_cycle == 'Yearly':
+            total_monthly_cost += sub.price / 12
+        elif sub.billing_cycle == 'Weekly':
+            total_monthly_cost += sub.price * 4
+        
+        # --- 2. 計算倒數天數 ---
+        # 把算出來的天數暫時掛在 sub 物件上，讓 HTML 可以用
+        delta = sub.next_payment_date - today
+        sub.days_left = delta.days
+
+    # 將總金額轉成整數
+    total_monthly_cost = int(total_monthly_cost)
+
     # 將資料傳遞給 index.html
     return render_template('index.html', subscriptions=subscriptions)
 

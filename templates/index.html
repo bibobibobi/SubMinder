@@ -13,6 +13,17 @@
     <div class="container">
         <h1>我的訂閱列表</h1>
 
+        <div class="card"
+            style="margin-bottom: 24px; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 0.9rem; opacity: 0.9;">每月預估總花費</div>
+                    <div style="font-size: 2.5rem; font-weight: 700;">${{ total_cost }}</div>
+                </div>
+                <div style="font-size: 3rem; opacity: 0.2;">💰</div>
+            </div>
+        </div>
+
         <div class="card">
             <div style="text-align: right; margin-bottom: 20px;">
                 <a href="{{ url_for('add_subscription') }}" class="btn">+ 新增訂閱</a>
@@ -36,23 +47,36 @@
                         <td><span
                                 style="background: #eef2ff; color: #4f46e5; padding: 4px 10px; border-radius: 20px; font-size: 0.85rem;">{{
                                 sub.billing_cycle }}</span></td>
-                        <td>{{ sub.next_payment_date }}</td>
+
+                        <td>
+                            {{ sub.next_payment_date }}
+
+                            {% if sub.days_left <= 3 and sub.days_left>= 0 %}
+                                <div
+                                    style="display: inline-block; margin-left: 8px; background-color: #fee2e2; color: #b91c1c; padding: 4px 8px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; animation: pulse 2s infinite;">
+                                    ⚠️
+                                    {% if sub.days_left == 0 %}
+                                    今天扣款！
+                                    {% else %}
+                                    剩 {{ sub.days_left }} 天
+                                    {% endif %}
+                                </div>
+                                {% elif sub.days_left < 0 %} <span
+                                    style="color: #9ca3af; font-size: 0.8rem; margin-left: 5px;">(已過期)</span>
+                                    {% endif %}
+                        </td>
+
                         <td>
                             <a href="{{ url_for('edit_subscription', id=sub.id) }}" class="btn"
-                                style="background-color: #6366f1; padding: 6px 14px; font-size: 0.9rem; margin-right: 5px;">
-                                編輯
-                            </a>
-
+                                style="background-color: #6366f1; padding: 6px 14px; font-size: 0.9rem; margin-right: 5px;">編輯</a>
                             <a href="{{ url_for('delete_subscription', id=sub.id) }}" class="btn"
                                 style="background-color: #ef4444; padding: 6px 14px; font-size: 0.9rem;"
-                                onclick="return confirm('確定要刪除 {{ sub.name }} 嗎？');">
-                                刪除
-                            </a>
+                                onclick="return confirm('確定要刪除 {{ sub.name }} 嗎？');">刪除</a>
                         </td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="4" style="text-align: center; color: #999; padding: 40px;">
+                        <td colspan="5" style="text-align: center; color: #999; padding: 40px;">
                             目前沒有訂閱資料，快去新增一筆吧！
                         </td>
                     </tr>
