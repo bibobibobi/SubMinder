@@ -123,7 +123,11 @@ def add_subscription():
 # 3. 編輯訂閱
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_subscription(id):
-    sub = Subscription.query.get_or_404(id)
+    sub = Subscription.query.get(id) # 改用 .get(id)
+
+    # 如果找不到這筆資料，直接回首頁
+    if not sub:
+        return redirect(url_for('index'))
 
     if request.method == 'POST':
         sub.name = request.form.get('name')
@@ -142,14 +146,15 @@ def edit_subscription(id):
 # 4. 刪除訂閱
 @app.route('/delete/<int:id>')
 def delete_subscription(id):
-    subscription_to_delete = Subscription.query.get_or_404(id)
+    # 改用 .get(id)，如果找不到只會回傳 None，不會直接報錯 404
+    sub = Subscription.query.get(id)
     
-    try:
-        db.session.delete(subscription_to_delete)
+    if sub:
+        # 當資料真的存在時才執行刪除
+        db.session.delete(sub)
         db.session.commit()
-        return redirect(url_for('index'))
-    except:
-        return "刪除時發生錯誤"
+
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
