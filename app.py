@@ -25,6 +25,23 @@ class Subscription(db.Model):
 with app.app_context():
     db.create_all()
 
+    # 如果資料庫是空的，就自動加幾筆範例資料
+    if not Subscription.query.first():
+        print("資料庫為空，正在寫入範例資料...")
+        
+        demo_subs = [
+            Subscription(name='Netflix', price=270, billing_cycle='Monthly', next_payment_date=date(2026, 2, 15)),
+            Subscription(name='Spotify', price=149, billing_cycle='Monthly', next_payment_date=date(2026, 2, 5)),
+            Subscription(name='Adobe CC', price=1680, billing_cycle='Yearly', next_payment_date=date(2026, 12, 20)),
+            Subscription(name='Gym', price=999, billing_cycle='Monthly', next_payment_date=date.today()) # 今天扣款，展示警告效果
+        ]
+        
+        for sub in demo_subs:
+            db.session.add(sub)
+        
+        db.session.commit()
+        print("範例資料寫入完成！")
+
 # --- 路由 ---
 
 # 1. 首頁：顯示列表 & 計算總金額 & 計算倒數
