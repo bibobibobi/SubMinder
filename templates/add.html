@@ -5,91 +5,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新增訂閱</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        a {
-            display: inline-block;
-            margin-top: 15px;
-            color: #666;
-            text-decoration: none;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-    <h1>新增一筆訂閱</h1>
+    <div class="container" style="max-width: 500px;">
+        <h1>新增一筆訂閱</h1>
 
-    {% if error %}
-    <div
-        style="background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #f5c6cb;">
-        {{ error }}
+        {% if error %}
+        <div class="alert-error">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="card">
+            <form method="POST" action="/add">
+                <div class="form-group">
+                    <label for="name">訂閱名稱</label>
+                    <input type="text" id="name" name="name" placeholder="例如：Netflix" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">價格</label>
+                    <input type="number" id="price" name="price" step="0.1" placeholder="0.0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="billing_cycle">扣款週期</label>
+                    <select id="billing_cycle" name="billing_cycle">
+                        <option value="Monthly">每月 (Monthly)</option>
+                        <option value="Yearly">每年 (Yearly)</option>
+                        <option value="Weekly">每週 (Weekly)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="next_payment_date">下次扣款日期</label>
+                    <input type="date" id="next_payment_date" name="next_payment_date" required>
+                </div>
+
+                <div style="margin-top: 30px; display: flex; gap: 10px;">
+                    <button type="submit" class="btn" style="flex: 2;">儲存訂閱</button>
+                    <a href="/" class="btn btn-secondary" style="flex: 1;">取消</a>
+                </div>
+            </form>
+        </div>
     </div>
-    {% endif %}
-    <form method="POST" action="/add">
-        <div class="form-group">
-            <label for="name">訂閱名稱 (如 Netflix)</label>
-            <input type="text" id="name" name="name" required>
-        </div>
-
-        <div class="form-group">
-            <label for="price">價格</label>
-            <input type="number" id="price" name="price" step="0.1" required>
-        </div>
-
-        <div class="form-group">
-            <label for="billing_cycle">扣款週期</label>
-            <select id="billing_cycle" name="billing_cycle">
-                <option value="Monthly">每月 (Monthly)</option>
-                <option value="Yearly">每年 (Yearly)</option>
-                <option value="Weekly">每週 (Weekly)</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="next_payment_date">下次扣款日期</label>
-            <input type="date" id="next_payment_date" name="next_payment_date" required>
-        </div>
-
-        <button type="submit">儲存訂閱</button>
-    </form>
-
-    <a href="/">← 回到列表</a>
 
 </body>
 
