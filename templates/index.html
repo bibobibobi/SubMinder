@@ -38,6 +38,11 @@
                                 sub.billing_cycle }}</span></td>
                         <td>{{ sub.next_payment_date }}</td>
                         <td>
+                            <a href="{{ url_for('edit_subscription', id=sub.id) }}" class="btn"
+                                style="background-color: #6366f1; padding: 6px 14px; font-size: 0.9rem; margin-right: 5px;">
+                                編輯
+                            </a>
+
                             <a href="{{ url_for('delete_subscription', id=sub.id) }}" class="btn"
                                 style="background-color: #ef4444; padding: 6px 14px; font-size: 0.9rem;"
                                 onclick="return confirm('確定要刪除 {{ sub.name }} 嗎？');">

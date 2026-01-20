@@ -96,6 +96,30 @@ def delete_subscription(id):
         return redirect(url_for('index'))
     except:
         return "刪除時發生錯誤"
+    
+# 編輯路由
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit_subscription(id):
+    # 1. 抓出要修改的那筆資料
+    sub = Subscription.query.get_or_404(id)
+
+    if request.method == 'POST':
+        # 2. 接收表單傳來的修改資料
+        sub.name = request.form.get('name')
+        sub.price = float(request.form.get('price'))
+        sub.billing_cycle = request.form.get('billing_cycle')
+        
+        date_str = request.form.get('next_payment_date')
+        sub.next_payment_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+
+        # 3. 提交變更
+        db.session.commit()
+        
+        # 4. 回首頁
+        return redirect(url_for('index'))
+
+    # 如果是 GET，就渲染 edit.html，並把資料 (sub) 傳過去
+    return render_template('edit.html', sub=sub)
 
 if __name__ == '__main__':
     app.run(debug=True)
