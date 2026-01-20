@@ -1,7 +1,10 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
 from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 # --- 資料庫連線設定 (統一使用 PostgreSQL) ---
@@ -10,7 +13,7 @@ database_url = os.environ.get('DATABASE_URL')
 
 # 確保一定有抓到網址，如果沒抓到 (例如 .env 沒設好) 就報錯提醒
 if not database_url:
-    raise ValueError("錯誤：找不到 DATABASE_URL，請確認 .env 檔案或 Render 設定已完成！")
+    raise ValueError("錯誤：找不到 DATABASE_URL, 請確認 .env 檔案或 Render 設定已完成！")
 
 # 修正 Render 網址格式 (postgres:// -> postgresql://)
 if database_url.startswith("postgres://"):
